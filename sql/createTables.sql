@@ -134,3 +134,75 @@ CREATE TABLE DriverExtraInfo
     from_city INT REFERENCES Cities (city_id),
     quantity  INT
 );
+
+INSERT INTO Roles (role_name) VALUES
+  ('Driver'),
+  ('Passenger');
+
+
+INSERT INTO Regions (region_name) VALUES
+  ('ГБАО'),
+  ('Хатлонская область'),
+  ('Согдийская область'),
+  ('Города республиканского подчинения'),
+
+
+
+INSERT INTO Cities (city_name, region_id) VALUES
+  ('Хорог', 1),
+  ('Куляб', 2),
+  ('Худжанд', 3),
+  ('Вахдат', 4),
+
+
+
+INSERT INTO Users (first_name, last_name, fathers_name, email, password, role_id) VALUES
+  ('Raimdodov', 'Shonasim', 'Umedovich', 'raimdodov.sh@gmail.com', '2003', 1),
+  ('Kurush', 'Qosimi', 'Qosimovich', 'qosimikurush@gmail.com', '2123', 2);
+
+
+INSERT INTO Cars (model, mark, autobody, car_number, seats, user_id, region_id) VALUES
+    ('Tayota', 'Land Cruiser 100', 'Picap', '1234AA04', '5', 1, 1),
+    ('Tayota', 'Land Cruiser 200', 'Picap', '1224AA01', '5', 1, 1);
+
+INSERT INTO Statuses (status_name) VALUES
+   ('Pending'),
+   ('Confirmed'),
+   ('Cancelled');
+
+INSERT INTO Seats (car_id, seat_number, is_available) VALUES
+  (1, 6, TRUE),
+  (2, 6, TRUE);
+
+
+
+INSERT INTO Bookings (user_id, seats_id, status_id, price, start_region_id, end_region_id) VALUES
+   (2, 1, 1, 100.00, 1, 2);
+
+
+
+INSERT INTO Chats (user_id, mate_id) VALUES
+     (1, 2);
+
+
+
+INSERT INTO Messages (from_user, to_user, message, chat_id) VALUES
+    (2, 1, 'Привет, как дела?', 1);
+
+
+INSERT INTO Notifications_type (type_name) VALUES
+   ('Message'),
+   ('Booking'),
+   ('Alert');
+
+
+INSERT INTO Notifications (user_id, notification_type, description) VALUES
+    (2, 2, 'Ваше бронирование подтверждено.');
+
+
+INSERT INTO Routes (from_city, to_city, price, date, user_id, car_id) VALUES
+      (1, 2, 200.00, '2024-10-15', 2, 1);
+
+
+INSERT INTO DriverExtraInfo (driver_id, from_city, quantity) VALUES
+     (1, 1, 10);
