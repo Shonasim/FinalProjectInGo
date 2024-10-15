@@ -10,7 +10,7 @@ import (
 	"log"
 )
 
-func (r *Repository) AddUser(u *models.User) (*models.User, error) {
+func (r *Repository) AddPersonalInfo(u *models.PersonalInformation) (*models.PersonalInformation, error) {
 	result := r.db.Create(&u)
 	if result.Error != nil {
 		return nil, fmt.Errorf("Failed to add user: %v\n", result.Error)
@@ -18,8 +18,8 @@ func (r *Repository) AddUser(u *models.User) (*models.User, error) {
 	return u, nil
 }
 
-func (r *Repository) GetUsers() ([]models.User, error) {
-	var users []models.User
+func (r *Repository) GetPersonalInfoUsers() ([]models.PersonalInformation, error) {
+	var users []models.PersonalInformation
 
 	// select * from users
 	result := r.db.Find(&users)
@@ -29,9 +29,8 @@ func (r *Repository) GetUsers() ([]models.User, error) {
 	}
 	return users, nil
 }
-
-func (r *Repository) GetUserByID(id int) (*models.User, error) {
-	var user models.User
+func (r *Repository) GetPersonalInfoById(id int) (*models.PersonalInformation, error) {
+	var user models.PersonalInformation
 
 	// select * from users where user_id = id
 	result := r.db.First(&user, id)
@@ -42,25 +41,25 @@ func (r *Repository) GetUserByID(id int) (*models.User, error) {
 	return &user, nil
 }
 
-func (r *Repository) GetUserByEmail(email string) error {
-	var user models.User
-	sql := `select * from users where email = ?;`
-	err := r.db.Raw(sql, email).Scan(&user).Error
+func (r *Repository) GetUserByLastName(lastName string) (*models.PersonalInformation, error) {
+	var user models.PersonalInformation
+	sql := `select * from personal_information where last_name = ?;`
+	err := r.db.Raw(sql, lastName).Scan(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil
+			return nil, nil
 		} else {
 			r.logger.Error("Faced an error while tried to select user from table, err: ", err)
-			return err
+			return nil, nil
 		}
 	}
-	if user.Email == "" {
-		return nil
+	if user.LastName == "" {
+		return nil, err
 	}
-	return errors2.ErrAlreadyExists
+	return &user, errors2.ErrAlreadyExists
 }
 
-func (r *Repository) UpdateUser(u *models.User) (*models.User, error) {
+func (r *Repository) UpdatePersonalInfo(u *models.PersonalInformation) (*models.PersonalInformation, error) {
 	// update users set username = 'admin', password = 'admin' where user_id = 1
 	result := r.db.Model(&u).Clauses(clause.Returning{}).Updates(&u)
 	if result.Error != nil {
@@ -69,15 +68,4 @@ func (r *Repository) UpdateUser(u *models.User) (*models.User, error) {
 	}
 
 	return u, nil
-}
-
-func (r *Repository) DeleteUser(id int) (int, error) {
-	// delete from users where user_id = id
-	result := r.db.Delete(&models.User{}, id)
-	if result.Error != nil {
-		log.Printf("DeleteUser: Failed to delete user: %v\n", result.Error)
-		return 0, fmt.Errorf("Failed to delete user: %v\n", result.Error)
-	}
-
-	return id, nil
 }

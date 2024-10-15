@@ -20,14 +20,14 @@ CREATE TABLE Cities
 CREATE TABLE Users
 (
     user_id      SERIAL PRIMARY KEY,
-    first_name   VARCHAR(20) NOT NULL,
-    last_name    VARCHAR(40) NOT NULL,
-    fathers_name VARCHAR(40) NOT NULL,
-    email        VARCHAR(80) NOT NULL UNIQUE,
+    first_name   VARCHAR(20)  NOT NULL,
+    last_name    VARCHAR(40)  NOT NULL,
+    fathers_name VARCHAR(40)  NOT NULL,
+    email        VARCHAR(80)  NOT NULL UNIQUE,
     password     VARCHAR(256) NOT NULL,
     role_id      INT REFERENCES Roles (role_id),
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active       BOOL DEFAULT TRUE,
+    active       BOOL      DEFAULT TRUE,
     updated_at   TIMESTAMP,
     deleted_at   TIMESTAMP
 );
@@ -41,9 +41,8 @@ CREATE TABLE Cars
     car_number VARCHAR(10) NOT NULL,
     seats      VARCHAR(50) NOT NULL,
     user_id    INT REFERENCES Users (user_id),
-    region_id  INT REFERENCES Regions (regions_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active     BOOL DEFAULT TRUE,
+    active     BOOL      DEFAULT TRUE,
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP
 );
@@ -72,7 +71,7 @@ CREATE TABLE Bookings
     start_region_id INT REFERENCES Regions (regions_id),
     end_region_id   INT REFERENCES Regions (regions_id),
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active          BOOL DEFAULT TRUE,
+    active          BOOL      DEFAULT TRUE,
     updated_at      TIMESTAMP,
     cancelled_at    TIMESTAMP
 );
@@ -90,7 +89,7 @@ CREATE TABLE Messages
     from_user  INT REFERENCES Users (user_id),
     to_user    INT REFERENCES Users (user_id),
     message    TEXT NOT NULL,
-    read       BOOL DEFAULT FALSE,
+    read       BOOL      DEFAULT FALSE,
     sent_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     read_at    TIMESTAMP,
     chat_id    INT REFERENCES Chats (chats_id)
@@ -111,18 +110,17 @@ CREATE TABLE Notifications
     description       TEXT NOT NULL
 );
 
--- Create Routes table
 CREATE TABLE Routes
 (
-    route_id   SERIAL PRIMARY KEY,
+    route_id   INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     from_city  INT REFERENCES Cities (city_id),
     to_city    INT REFERENCES Cities (city_id),
     price      NUMERIC(10, 2),
-    date       DATE,
-    user_id    INT REFERENCES Users (user_id),
+    date       date,
+    driver_id  INT REFERENCES Users (user_id),
     car_id     INT REFERENCES Cars (car_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active     BOOL DEFAULT TRUE,
+    active     BOOL      DEFAULT TRUE,
     updated_at TIMESTAMP,
     deleted_at TIMESTAMP
 );
@@ -132,77 +130,25 @@ CREATE TABLE DriverExtraInfo
     info_id   SERIAL PRIMARY KEY,
     driver_id INT REFERENCES Users (user_id),
     from_city INT REFERENCES Cities (city_id),
+    to_city   INT references cities (city_id),
     quantity  INT
 );
 
-INSERT INTO Roles (role_name) VALUES
-  ('Driver'),
-  ('Passenger');
+alter table users drop column fathers_name;
+drop table roles;
 
-
-INSERT INTO Regions (region_name) VALUES
-  ('ГБАО'),
-  ('Хатлонская область'),
-  ('Согдийская область'),
-  ('Города республиканского подчинения'),
-
-
-
-INSERT INTO Cities (city_name, region_id) VALUES
-  ('Хорог', 1),
-  ('Куляб', 2),
-  ('Худжанд', 3),
-  ('Вахдат', 4),
-
-
-
-INSERT INTO Users (first_name, last_name, fathers_name, email, password, role_id) VALUES
-  ('Raimdodov', 'Shonasim', 'Umedovich', 'raimdodov.sh@gmail.com', '2003', 1),
-  ('Kurush', 'Qosimi', 'Qosimovich', 'qosimikurush@gmail.com', '2123', 2);
-
-
-INSERT INTO Cars (model, mark, autobody, car_number, seats, user_id, region_id) VALUES
-    ('Tayota', 'Land Cruiser 100', 'Picap', '1234AA04', '5', 1, 1),
-    ('Tayota', 'Land Cruiser 200', 'Picap', '1224AA01', '5', 1, 1);
-
-INSERT INTO Statuses (status_name) VALUES
-   ('Pending'),
-   ('Confirmed'),
-   ('Cancelled');
-
-INSERT INTO Seats (car_id, seat_number, is_available) VALUES
-  (1, 6, TRUE),
-  (2, 6, TRUE);
-
-
-
-INSERT INTO Bookings (user_id, seats_id, status_id, price, start_region_id, end_region_id) VALUES
-   (2, 1, 1, 100.00, 1, 2);
-
-
-
-INSERT INTO Chats (user_id, mate_id) VALUES
-     (1, 2);
-
-
-
-INSERT INTO Messages (from_user, to_user, message, chat_id) VALUES
-    (2, 1, 'Привет, как дела?', 1);
-
-
-INSERT INTO Notifications_type (type_name) VALUES
-   ('Message'),
-   ('Booking'),
-   ('Alert');
-
-
-INSERT INTO Notifications (user_id, notification_type, description) VALUES
-    (2, 2, 'Ваше бронирование подтверждено.');
-
-
-INSERT INTO Routes (from_city, to_city, price, date, user_id, car_id) VALUES
-      (1, 2, 200.00, '2024-10-15', 2, 1);
-
-
-INSERT INTO DriverExtraInfo (driver_id, from_city, quantity) VALUES
-     (1, 1, 10);
+create table personal_information
+(
+    info_id      INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id      int references users (user_id),
+    first_name   varchar(20) not null,
+    last_name    varchar(20) not null,
+    fathers_name varchar(20) not null,
+    about_me     text        not null,
+    sex          varchar(10) not null,
+    photo        text,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    active       BOOL      DEFAULT TRUE,
+    updated_at   TIMESTAMP,
+    deleted_at   TIMESTAMP
+);

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"FinalProject/internal/middleware"
 	"FinalProject/internal/service"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -26,5 +27,22 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) InitRoutes() {
-	h.mux.Handle(http.MethodPost, "/register", h.Register)
+	h.mux.Use(
+		middleware.CORS(),
+		middleware.Recovery(),
+	)
+
+	registration := h.mux.Group("/register")
+	{
+		registration.Handle(http.MethodGet, "/check-user", h.GetUserByEmail)
+		registration.Handle(http.MethodPost, "", h.Register)
+		registration.Handle(http.MethodPost, "/personal-information", h.AddPersonalInfo)
+	}
+
+	h.mux.Handle(http.MethodGet, "sign-in")
+
+	h.mux.Handle(http.MethodGet, "/getusers", h.GetUsers)
+	h.mux.Handle(http.MethodGet, "/getusers/{id}", h.GetUserByID)
+	h.mux.Handle(http.MethodGet, "/delete", h.DeleteUser)
+
 }
