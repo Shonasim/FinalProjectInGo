@@ -157,3 +157,4 @@ alter table cities drop column region_id;
 drop table regions;
 
 insert into cities (city_name) values ('Dushanbe'), ('Kulob'), ('Khorog'), ('Khujand');
+delete from seats where seats_id = 2

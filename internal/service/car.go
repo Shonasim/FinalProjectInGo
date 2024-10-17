@@ -5,6 +5,9 @@ import (
 	errors2 "FinalProject/pkg/errors"
 )
 
+func (s *Service) GetCars(userId int) ([]models.Car, error) {
+	return s.Repository.GetCar(userId)
+}
 func (s *Service) FillCars(car models.Car) (*models.Car, error) {
 	err := validateCar(&car)
 	if err != nil {

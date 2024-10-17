@@ -54,5 +54,15 @@ func (h *Handler) InitRoutes() {
 	car := v1.Group("/cars")
 	{
 		car.Handle(http.MethodPost, "/add", h.CreateCar)
+		car.Handle(http.MethodGet, "/get", h.GetCars)
+	}
+
+	seat := car.Group("/seats")
+	{
+		seat.Handle(http.MethodPost, "/add", h.AddSeats)
+	}
+	routes := v1.Group("/routes")
+	{
+		routes.Handle(http.MethodPost, "/add", h.CreateRoute)
 	}
 }
