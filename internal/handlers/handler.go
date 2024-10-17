@@ -39,10 +39,20 @@ func (h *Handler) InitRoutes() {
 		registration.Handle(http.MethodPost, "/personal-information", h.AddPersonalInfo)
 	}
 
-	h.mux.Handle(http.MethodGet, "sign-in")
+	h.mux.Handle(http.MethodPost, "/sign-in", h.SignIn)
 
-	h.mux.Handle(http.MethodGet, "/getusers", h.GetUsers)
-	h.mux.Handle(http.MethodGet, "/getusers/{id}", h.GetUserByID)
-	h.mux.Handle(http.MethodGet, "/delete", h.DeleteUser)
+	cities := h.mux.Group("/cities")
+	{
+		cities.Handle(http.MethodGet, "", h.GetCities)
+	}
 
+	v1 := h.mux.Group("/v1")
+	v1.Use(
+		middleware.Authenticate(),
+	)
+
+	car := v1.Group("/cars")
+	{
+		car.Handle(http.MethodPost, "/add", h.CreateCar)
+	}
 }

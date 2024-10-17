@@ -4,7 +4,6 @@ import (
 	"FinalProject/internal/models"
 	"FinalProject/internal/utils"
 	"FinalProject/pkg/errors"
-	errors2 "errors"
 	"fmt"
 	"regexp"
 )
@@ -17,6 +16,7 @@ func (s *Service) GetUserByEmail(email string) error {
 }
 
 func (s *Service) Registration(user models.User) (*models.User, error) {
+
 	err := validateUser(user)
 	if err != nil {
 		return nil, err
@@ -26,97 +26,40 @@ func (s *Service) Registration(user models.User) (*models.User, error) {
 		return nil, errors.ErrFailedHashing
 	}
 	user.Password = hashPass
-	return s.Repository.AddUser(&user)
-}
-
-// ListUsers функция, которая возвращает список всех пользователей из репозитория.
-func (s *Service) ListUsers() ([]models.User, error) {
-	// Получаем список пользователей из репозитория
-	users, err := s.Repository.GetUsers()
+	client, err := s.Repository.AddUser(&user)
 	if err != nil {
 		return nil, err
 	}
-
-	// Проверяем, что список пользователей не пустой
-	if len(users) == 0 {
-		return nil, fmt.Errorf("no users found")
-	}
-
-	return users, nil
+	return client, nil
 }
 
-// FindUser функция, которая возвращает пользователя по ID.
-func (s *Service) FindUser(id int) (*models.User, error) {
-	// Получаем пользователя по ID из репозитория
-	userByID, err := s.Repository.GetUserByID(id)
+func (s *Service) SignIn(u *models.User) (string, error) {
+	// Проверка существования пользователя
+	user, err := s.Repository.GetUser(u.Email)
+
+	// Если ошибка "record not found", то пользователь не существует
 	if err != nil {
-		// Если произошла ошибка и это ошибка "record not found", возвращаем её
-		if errors2.As(err, errors.ErrRecordNotFound) {
-			return nil, fmt.Errorf("user with id %d not found", id)
-		}
-		return nil, err
+		return "", err // Вернуть ошибку, если она есть
+	}
+	if user.Email == "" {
+		return "", fmt.Errorf("пользователь с именем %s не найден", u.Email)
 	}
 
-	return userByID, nil
-}
+	// Проверка пароля пользователя
+	if !utils.CheckPasswordHash(u.Password, user.Password) {
+		return "", fmt.Errorf("введен неправильный пароль")
+	}
 
-// EditUser функция, которая редактирует пользователя в репозитории.
-func (s *Service) EditUser(u *models.User) (*models.User, error) {
-	// Получаем пользователя по ID из репозитория
-	_, err := s.Repository.GetUserByID(u.UserID)
+	// Генерация JWT токена для авторизованного пользователя
+	token, err := utils.GenerateJWT(user)
 	if err != nil {
-		// Если произошла ошибка и это ошибка "record not found", возвращаем её
-		if errors2.As(err, errors.ErrRecordNotFound) {
-			return nil, fmt.Errorf("user with id %d not found", u.UserID)
-		}
-		return nil, err
+		return "", fmt.Errorf("не удалось сгенерировать токен: %w", err)
 	}
 
-	// Обновляем информацию о пользователе
-	updatedUser, err := s.Repository.UpdateUser(u)
-	if err != nil {
-		return nil, fmt.Errorf("failed to update user: %w", err)
-	}
-
-	// Не отправляем пароль в ответ
-	if updatedUser.Password != "" {
-		updatedUser.Password = ""
-	}
-
-	return updatedUser, nil
-}
-
-// DeleteUser функция, которая удаляет пользователя из репозитория.
-func (s *Service) DeleteUser(id int) (int, error) {
-	// Получаем пользователя по ID из репозитория
-	_, err := s.Repository.GetUserByID(id)
-	if err != nil {
-		// Если произошла ошибка и это ошибка "record not found", возвращаем её
-		if errors2.Is(err, errors.ErrRecordNotFound) {
-			return 0, fmt.Errorf("user with id %d not found", id)
-		}
-		return 0, err
-	}
-
-	// Удаляем пользователя
-	deletedRows, err := s.Repository.DeleteUser(id)
-	if err != nil {
-		return 0, fmt.Errorf("failed to delete user with id %d: %w", id, err)
-	}
-
-	return deletedRows, nil
+	return token, nil
 }
 
 func validateUser(user models.User) error {
-	//if user.FirstName == "" {
-	//	return errors.ErrInvalidFirstName
-	//}
-	//if user.LastName == "" {
-	//	return errors.ErrInvalidLastName
-	//}
-	//if user.FathersName == "" {
-	//	return errors.ErrInvalidFathersName
-	//}
 	if user.Email == "" {
 		return errors.ErrInvalidEmail
 	}

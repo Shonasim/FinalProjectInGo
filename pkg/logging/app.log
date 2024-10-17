@@ -1,0 +1,21 @@
+{"level":"info","msg":"AddPersonalInfo - h.service.FillExtraInfo error: empty or invalid first name","time":"2024-10-16T17:41:37+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert personal information, err: ОШИБКА: отношение \"personal_informations\" не существует (SQLSTATE 42P01)","time":"2024-10-16T17:41:59+05:00"}
+{"level":"info","msg":"AddPersonalInfo - h.service.FillExtraInfo error: failed to create","time":"2024-10-16T17:41:59+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert personal information, err: ОШИБКА: в столбец \"info_id\" можно вставить только значение по умолчанию (SQLSTATE 428C9)","time":"2024-10-16T17:43:12+05:00"}
+{"level":"info","msg":"AddPersonalInfo - h.service.FillExtraInfo error: failed to create","time":"2024-10-16T17:43:12+05:00"}
+{"level":"info","msg":"SignIn - h.service.SignIn error: введен неправильный пароль","time":"2024-10-16T17:53:23+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert user, err: \u0026{0xc0002aa480 \u003cnil\u003e 1 0xc0003381c0 0}","time":"2024-10-16T18:00:46+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert user, err: \u0026{0xc0002aa480 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности \"users_email_key\" (SQLSTATE 23505) 0 0xc000338540 0}","time":"2024-10-16T18:01:08+05:00"}
+{"level":"info","msg":"AddCar - h.service.AddCar error: empty or invalid car number","time":"2024-10-17T10:23:38+05:00"}
+{"level":"info","msg":"AddCar - h.service.AddCar error: empty or invalid car number","time":"2024-10-17T10:30:35+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert car, err: ОШИБКА: отношение \"car\" не существует (SQLSTATE 42P01)","time":"2024-10-17T10:48:55+05:00"}
+{"level":"info","msg":"AddCar - h.service.AddCar error: failed to create","time":"2024-10-17T10:48:55+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert car, err: ОШИБКА: отношение \"car\" не существует (SQLSTATE 42P01)","time":"2024-10-17T10:50:02+05:00"}
+{"level":"info","msg":"AddCar - h.service.AddCar error: failed to create","time":"2024-10-17T10:50:02+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert car, err: failed to encode args[4]: unable to encode 4 into text format for varchar (OID 1043): cannot find encode plan","time":"2024-10-17T11:12:07+05:00"}
+{"level":"info","msg":"AddCar - h.service.AddCar error: failed to create car","time":"2024-10-17T11:12:07+05:00"}
+{"level":"info","msg":"AddCar - c.BindJSON error: json: cannot unmarshal number into Go struct field Car.Seats of type string","time":"2024-10-17T11:14:29+05:00"}
+{"level":"info","msg":"AddCar - c.BindJSON error: json: cannot unmarshal number into Go struct field Car.Seats of type string","time":"2024-10-17T11:15:12+05:00"}
+{"level":"info","msg":"AddCar - c.BindJSON error: json: cannot unmarshal number into Go struct field Car.Seats of type string","time":"2024-10-17T11:16:33+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert user, err: \u0026{0xc0002aa480 \u003cnil\u003e 1 0xc00030a380 0}","time":"2024-10-17T11:20:16+05:00"}
+{"level":"error","msg":"Faced an error while tried to insert user, err: \u0026{0xc0002f8480 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности \"users_email_key\" (SQLSTATE 23505) 0 0xc0003088c0 0}","time":"2024-10-17T11:25:18+05:00"}

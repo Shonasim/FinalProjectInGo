@@ -8,26 +8,19 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"log"
+	"time"
 )
 
 func (r *Repository) AddUser(u *models.User) (*models.User, error) {
-	result := r.db.Create(&u)
-	if result.Error != nil {
-		return nil, fmt.Errorf("Failed to add user: %v\n", result.Error)
+	query := `INSERT INTO users
+    (email,password,created_at) 
+    VALUES (?,?,?)`
+	err := r.db.Exec(query, u.Email, u.Password, time.Now())
+	if err != nil {
+		r.logger.Error("Faced an error while tried to insert user, err: ", err)
+		return nil, errors2.ErrFailedCreate
 	}
 	return u, nil
-}
-
-func (r *Repository) GetUsers() ([]models.User, error) {
-	var users []models.User
-
-	// select * from users
-	result := r.db.Find(&users)
-	if result.Error != nil {
-		log.Printf("GetUsers: Failed to get users: %v\n", result.Error)
-		return nil, fmt.Errorf("Failed to get users: %v\n", result.Error)
-	}
-	return users, nil
 }
 
 func (r *Repository) GetUserByID(id int) (*models.User, error) {
@@ -41,7 +34,16 @@ func (r *Repository) GetUserByID(id int) (*models.User, error) {
 	}
 	return &user, nil
 }
-
+func (r *Repository) GetUser(email string) (models.User, error) {
+	var user models.User
+	sql := `select * from users where email = ?;`
+	err := r.db.Raw(sql, email).Scan(&user).Error
+	if err != nil {
+		r.logger.Error("Faced an error while tried to select user from table, err: ", err)
+		return models.User{}, err
+	}
+	return user, nil
+}
 func (r *Repository) GetUserByEmail(email string) error {
 	var user models.User
 	sql := `select * from users where email = ?;`

@@ -16,16 +16,19 @@ import (
 )
 
 func main() {
+	// чтение настроек
 	configs, err := config.InitConfigs()
 	if err != nil {
 		log.Fatal("Failed to read configs: ", err)
 	}
 
+	// инициализация логгера
 	logger, err := logging.InitializeLogger()
 	if err != nil {
 		log.Fatal("Failed to initialize logger: ", err)
 	}
 
+	// подключение к базе данных
 	db, err := connectToDB(configs.Database)
 	if err != nil {
 		log.Fatal("Failed to connect to database, err: ", err)

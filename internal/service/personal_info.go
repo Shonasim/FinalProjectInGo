@@ -5,14 +5,6 @@ import (
 	"FinalProject/pkg/errors"
 )
 
-func (s *Service) GetUserByLastName(lastName string) (*models.PersonalInformation, error) {
-	user, err := s.Repository.GetUserByLastName(lastName)
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
-}
-
 func (s *Service) FillExtraInfo(information models.PersonalInformation) (*models.PersonalInformation, error) {
 	err := validatePersonaInfo(information)
 	if err != nil {
