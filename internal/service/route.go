@@ -3,6 +3,7 @@ package service
 import (
 	"FinalProject/internal/models"
 	errors2 "FinalProject/pkg/errors"
+	"time"
 )
 
 func (s *Service) AddRoute(route *models.Route) (*models.Route, error) {
@@ -33,6 +34,18 @@ func validateRoute(route *models.Route) error {
 	}
 	if route.CarId == 0 {
 		return errors2.ErrInvalidCarId
+	}
+	layout := "2006-01-02"
+	d1, err := time.Parse(layout, time.Now().String())
+	if err != nil {
+		return errors2.ErrInvalidDate
+	}
+	d2, err := time.Parse(layout, route.Date.String())
+	if err != nil {
+		return errors2.ErrInvalidDate
+	}
+	if d1.After(d2) {
+		return errors2.ErrInvalidDate
 	}
 	return nil
 }

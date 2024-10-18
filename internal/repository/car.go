@@ -17,6 +17,7 @@ func (r *Repository) GetCar(userId int) ([]models.Car, error) {
 	}
 	return car, nil // Возвращаем указатель на автомобиль
 }
+
 func (r *Repository) AddCar(u *models.Car) (*models.Car, error) {
 	query := `INSERT INTO cars
     (model,mark,autobody,car_number,seats,user_id, created_at)
