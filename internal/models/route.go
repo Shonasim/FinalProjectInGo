@@ -7,7 +7,7 @@ type Route struct {
 	FromCity  int       `json:"from_city"`
 	ToCity    int       `json:"to_city"`
 	Price     float64   `json:"price"`
-	Date      Date      `json:"date"`
+	Date      time.Time `json:"date"`
 	DriverId  int       `json:"driver_id"`
 	CarId     int       `json:"car_id"`
 	CreatedAt time.Time `json:"created_at"`
