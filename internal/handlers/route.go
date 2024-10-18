@@ -32,3 +32,13 @@ func (h *Handler) CreateRoute(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": addRoute})
 }
+
+func (h *Handler) GetRoutes(c *gin.Context) {
+	routes, err := h.service.GetRoutes()
+	if err != nil {
+		h.logger.Printf("GetRoutes - h.service.GetRoutes error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": routes})
+}

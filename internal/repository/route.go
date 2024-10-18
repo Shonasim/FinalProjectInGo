@@ -15,3 +15,14 @@ func (r *Repository) AddRoute(route *models.Route) (*models.Route, error) {
 	}
 	return route, nil
 }
+
+func (r *Repository) GetRoutes() ([]models.Route, error) {
+	var routes []models.Route
+	query := `select * from routes`
+	err := r.db.Raw(query).Scan(&routes).Error
+	if err != nil {
+		r.logger.Error("Faced an error while tried to select routes, err: ", err)
+		return nil, errors.ErrFailedToGet
+	}
+	return routes, nil
+}
