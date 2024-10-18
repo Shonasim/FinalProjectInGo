@@ -26,3 +26,14 @@ func (r *Repository) GetRoutes() ([]models.Route, error) {
 	}
 	return routes, nil
 }
+
+func (r *Repository) GetRouteByID(id int) (*models.Route, error) {
+	var route models.Route
+	query := `select * from routes where route_id = ?`
+	err := r.db.Raw(query, id).Scan(&route).Error
+	if err != nil {
+		r.logger.Error("Faced an error while tried to select route by id, err: ", err)
+		return nil, errors.ErrFailedToGet
+	}
+	return &route, nil
+}

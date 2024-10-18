@@ -65,5 +65,6 @@ func (h *Handler) InitRoutes() {
 	{
 		routes.Handle(http.MethodPost, "/add", h.CreateRoute)
 		routes.Handle(http.MethodGet, "/get", h.GetRoutes)
+		routes.Handle(http.MethodGet, "/get/{route_id}", h.GetRouteById)
 	}
 }

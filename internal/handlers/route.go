@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) CreateRoute(c *gin.Context) {
@@ -37,6 +38,23 @@ func (h *Handler) GetRoutes(c *gin.Context) {
 	routes, err := h.service.GetRoutes()
 	if err != nil {
 		h.logger.Printf("GetRoutes - h.service.GetRoutes error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": routes})
+}
+
+func (h *Handler) GetRouteById(c *gin.Context) {
+	routeIdStr := c.Param("route_id")
+	routeId, err := strconv.Atoi(routeIdStr)
+	if err != nil {
+		h.logger.Printf("GetRouteById - strconv.Atoi error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid route_id"})
+		return
+	}
+	routes, err := h.service.GetRouteById(routeId)
+	if err != nil {
+		h.logger.Printf("GetRouteById - h.service.GetRouteById error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
