@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) CreateReservation(c *gin.Context) {
@@ -34,4 +35,24 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": newBooking})
+}
+
+func (h *Handler) GetReservation(c *gin.Context) {
+	bookingId := c.Param("booking_id")
+	id, err := strconv.Atoi(bookingId)
+	userIDAny, _ := c.Get("user_id")
+	userID := userIDAny.(int)
+	if err != nil {
+		h.logger.Printf("GetReservation - strconv.Atoi error: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": errors2.ErrFailedConvert})
+		return
+	}
+	reservation, err := h.service.GetReservationById(id, userID)
+	if err != nil {
+		h.logger.Printf("GetReservation - h.service.GetReservationById error: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": reservation})
 }

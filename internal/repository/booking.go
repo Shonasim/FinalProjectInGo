@@ -16,3 +16,14 @@ func (r *Repository) AddBooking(u *models.Booking) (*models.Booking, error) {
 	}
 	return u, nil
 }
+
+func (r *Repository) GetReservationById(id, userId int) (*models.Booking, error) {
+	var reservation models.Booking
+	query := `select * from bookings where booking_id = ? and user_id = ?`
+	err := r.db.Raw(query, id, userId).Scan(&reservation).Error
+	if err != nil {
+		r.logger.Error("Faced an error while tried to select booking, err: ", err)
+		return nil, errors.ErrFailedToGet
+	}
+	return &reservation, nil
+}

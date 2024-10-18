@@ -71,5 +71,6 @@ func (h *Handler) InitRoutes() {
 	booking := v1.Group("reserve")
 	{
 		booking.Handle(http.MethodPost, "/add", h.CreateReservation)
+		booking.Handle(http.MethodGet, "/get/{booking_id}", h.GetReservation)
 	}
 }

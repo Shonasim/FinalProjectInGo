@@ -13,6 +13,10 @@ func (s *Service) AddBooking(u *models.Booking) (*models.Booking, error) {
 	return s.Repository.AddBooking(u)
 }
 
+func (s *Service) GetReservationById(id, userId int) (*models.Booking, error) {
+	return s.Repository.GetReservationById(id, userId)
+}
+
 func validateBooking(u *models.Booking) error {
 	// Проверяем, что все обязательные идентификаторы установлены
 	if u.UserId <= 0 {
@@ -39,4 +43,8 @@ func validateBooking(u *models.Booking) error {
 		return errors2.ErrInvalidPrice
 	}
 	return nil
+}
+
+func (s *Service) GetReservation(id int) {
+
 }
