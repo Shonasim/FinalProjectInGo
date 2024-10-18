@@ -64,6 +64,6 @@ func (h *Handler) InitRoutes() {
 	routes := v1.Group("/routes")
 	{
 		routes.Handle(http.MethodPost, "/add", h.CreateRoute)
-		routes.Handle(http.MethodGet, "/get")
+		routes.Handle(http.MethodGet, "/get", h.GetRoutes)
 	}
 }
