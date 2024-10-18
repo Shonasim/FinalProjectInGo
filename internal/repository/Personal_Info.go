@@ -3,7 +3,6 @@ package repository
 import (
 	"FinalProject/internal/models"
 	"FinalProject/pkg/errors"
-	"log"
 	"time"
 )
 
@@ -24,8 +23,18 @@ func (r *Repository) GetPersonalInfoById(userId int) (*models.PersonalInformatio
 	query := `select * from personal_information where user_id = ?`
 	err := r.db.Raw(query, userId).Scan(&persInfo).Error
 	if err != nil {
-		log.Printf("GetPersonalInfoById: Failed to get user: %v\n", err)
+		r.logger.Error("GetPersonalInfoById: Failed to get user: %v\n", err)
 		return nil, errors.ErrFailedToGet
 	}
 	return &persInfo, nil
+}
+
+func (r *Repository) UploadPhoto(userId int, path string) error {
+	query := `update personal_information photo = ? where user_id = ?`
+	err := r.db.Exec(query, path, userId).Error
+	if err != nil {
+		r.logger.Error("UploadPhoto: Failed to insert photo: ", err)
+		return errors.ErrFailedToInsert
+	}
+	return nil
 }

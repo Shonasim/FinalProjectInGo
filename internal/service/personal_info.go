@@ -17,6 +17,10 @@ func (s *Service) GetPersInfoById(userId int) (*models.PersonalInformation, erro
 	return s.Repository.GetPersonalInfoById(userId)
 }
 
+func (s *Service) UploadPhoto(userId int, path string) error {
+	return s.Repository.UploadPhoto(userId, path)
+}
+
 func validatePersonaInfo(user models.PersonalInformation) error {
 	if user.FirstName == "" {
 		return errors.ErrInvalidFirstName

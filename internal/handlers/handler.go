@@ -78,4 +78,10 @@ func (h *Handler) InitRoutes() {
 	{
 		user.Handle(http.MethodGet, "/{user_id}", h.GetPersonalInfoByID)
 	}
+
+	photo := v1.Group("/photo")
+	{
+		photo.Handle(http.MethodPost, "/upload", h.UploadPhoto)
+		photo.Handle(http.MethodGet, "/photo/:id", h.GetPhoto)
+	}
 }
