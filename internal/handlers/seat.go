@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func (h *Handler) AddSeats(c *gin.Context) {
@@ -33,5 +34,22 @@ func (h *Handler) AddSeats(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": newSeats})
+}
 
+func (h *Handler) GetSeats(c *gin.Context) {
+	carIdStr := c.Param("car_id")
+	carId, err := strconv.Atoi(carIdStr)
+	if err != nil {
+		h.logger.Printf("GetSeats - strconv.Atoi error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid route_id"})
+		return
+	}
+	seats, err := h.service.GetSeats(carId)
+	if err != nil {
+		h.logger.Printf("GetSeats - h.service.GetSeats error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal_error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": seats})
 }

@@ -37,3 +37,21 @@ func (r *Repository) GetRouteByID(id int) (*models.Route, error) {
 	}
 	return &route, nil
 }
+
+func (r *Repository) FinishRoute(u models.Finish) error {
+	query := `update seats set available = true where car_id = ?`
+	err := r.db.Exec(query, u.CarId).Error
+	if err != nil {
+		r.logger.Error("Faced an error while tried to update seats, err: ", err)
+		return err
+	}
+
+	query = `update booking set status_id = 1 where route_id = ?`
+	err = r.db.Exec(query, u.CarId).Error
+	if err != nil {
+		r.logger.Error("Faced an error while tried to update bookings, err: ", err)
+		return err
+	}
+
+	return nil
+}

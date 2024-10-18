@@ -156,24 +156,32 @@ create table personal_information
 alter table cities drop column region_id;
 drop table regions;
 
-insert into cities (city_name) values ('Dushanbe'), ('Kulob'), ('Khorog'), ('Khujand');
-delete from seats where seats_id = 2
+insert into cities (city_name)
+values ('Dushanbe'),
+       ('Kulob'),
+       ('Khorog'),
+       ('Khujand');
+delete
+from seats
+where seats_id = 2
 
 drop table Bookings;
 
 
 CREATE TABLE Bookings
 (
-    bookings_id     SERIAL PRIMARY KEY,
-    user_id         INT REFERENCES Users (user_id),
-    driver_id       INT REFERENCES Users (user_id),
-    seats_id        INT REFERENCES Seats (seats_id),
-    status_id       INT REFERENCES Statuses (status_id),
-    price           NUMERIC(10, 2),
+    bookings_id   SERIAL PRIMARY KEY,
+    user_id       INT REFERENCES Users (user_id),
+    driver_id     INT REFERENCES Users (user_id),
+    car_id        INT references Cars (car_id),
+    route_id      int references Routes (route_id),
+    seats_id      INT REFERENCES Seats (seats_id),
+    status_id     INT REFERENCES Statuses (status_id),
+    price         NUMERIC(10, 2),
     start_city_id INT REFERENCES Regions (regions_id),
     end_city_id   INT REFERENCES Regions (regions_id),
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active          BOOL      DEFAULT TRUE,
-    updated_at      TIMESTAMP,
-    cancelled_at    TIMESTAMP
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    active        BOOL      DEFAULT TRUE,
+    updated_at    TIMESTAMP,
+    cancelled_at  TIMESTAMP
 );

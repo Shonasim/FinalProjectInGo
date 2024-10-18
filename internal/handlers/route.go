@@ -60,3 +60,22 @@ func (h *Handler) GetRouteById(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": routes})
 }
+
+func (h *Handler) FinishRoute(c *gin.Context) {
+	var finishReq models.Finish
+	err := c.BindJSON(&finishReq)
+	if err != nil {
+		h.logger.Printf("FinishRoute - c.BindJSON error: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": errors2.ErrBindJSON})
+		return
+	}
+
+	err = h.service.FinishRoute(finishReq)
+	if err != nil {
+		h.logger.Printf("FinishRoute - h.service.FinishRoute error: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "internal_error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, "Successfully finished route")
+}

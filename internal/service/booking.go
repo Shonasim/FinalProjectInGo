@@ -37,10 +37,16 @@ func validateBooking(u *models.Booking) error {
 	if u.EndCityId <= 0 {
 		return errors2.ErrInvalidCity
 	}
-
+	if u.CarId == 0 {
+		return errors2.ErrInvalidCarId
+	}
 	// Проверяем, что цена положительная
 	if u.Price <= 0 {
 		return errors2.ErrInvalidPrice
+	}
+
+	if u.RouteId == 0 {
+		return errors2.ErrInvalidRouteId
 	}
 	return nil
 }

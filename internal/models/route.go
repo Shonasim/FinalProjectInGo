@@ -15,3 +15,8 @@ type Route struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	DeletedAt time.Time `json:"deleted_at"`
 }
+
+type Finish struct {
+	CarId   int `json:"car_id"`
+	RouteId int `json:"route_id"`
+}

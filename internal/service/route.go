@@ -22,6 +22,10 @@ func (s *Service) GetRouteById(id int) (*models.Route, error) {
 	return s.Repository.GetRouteByID(id)
 }
 
+func (s *Service) FinishRoute(u models.Finish) error {
+	return s.Repository.FinishRoute(u)
+}
+
 func validateRoute(route *models.Route) error {
 	if route.FromCity == 0 {
 		return errors2.ErrInvalidCity

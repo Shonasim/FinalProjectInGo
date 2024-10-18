@@ -16,3 +16,14 @@ func (r *Repository) AddSeat(s *models.Seats) (*models.Seats, error) {
 	}
 	return s, nil
 }
+
+func (r *Repository) GetSeats(carId int) ([]models.Seat, error) {
+	var seats []models.Seat
+	query := `select * from seats where car_id = ? and available = true`
+	err := r.db.Raw(query, carId).Scan(&seats).Error
+	if err != nil {
+		r.logger.Error("Faced an error while tried to get seats, err: ", err)
+		return nil, errors.ErrFailedToGet
+	}
+	return seats, nil
+}

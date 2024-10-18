@@ -20,3 +20,7 @@ func validateSeat(s *models.Seats) error {
 	}
 	return nil
 }
+
+func (s *Service) GetSeats(carId int) ([]models.Seat, error) {
+	return s.Repository.GetSeats(carId)
+}

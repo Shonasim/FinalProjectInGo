@@ -6,6 +6,8 @@ type Booking struct {
 	BookingId   int       `json:"booking_id"`
 	UserId      int       `json:"user_id"`
 	DriverId    int       `json:"driver_id"`
+	CarId       int       `json:"car_id"`
+	RouteId     int       `json:"route_id"`
 	SeatsId     int       `json:"seats_id"`
 	StatusId    int       `json:"status_id"`
 	Price       float64   `json:"price"`

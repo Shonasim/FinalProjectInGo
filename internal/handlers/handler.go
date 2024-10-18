@@ -57,15 +57,17 @@ func (h *Handler) InitRoutes() {
 		car.Handle(http.MethodGet, "/get", h.GetCars)
 	}
 
-	seat := car.Group("/seats")
+	seats := car.Group("/seats")
 	{
-		seat.Handle(http.MethodPost, "/add", h.AddSeats)
+		seats.Handle(http.MethodPost, "/add", h.AddSeats)
+		seats.Handle(http.MethodGet, "/get/{car_id}", h.GetSeats)
 	}
-	route := v1.Group("/routes")
+	routes := v1.Group("/routes")
 	{
-		route.Handle(http.MethodPost, "/add", h.CreateRoute)
-		route.Handle(http.MethodGet, "/get", h.GetRoutes)
-		route.Handle(http.MethodGet, "/get/{route_id}", h.GetRouteById)
+		routes.Handle(http.MethodPost, "/add", h.CreateRoute)
+		routes.Handle(http.MethodGet, "/get", h.GetRoutes)
+		routes.Handle(http.MethodGet, "/get/{route_id}", h.GetRouteById)
+		routes.Handle(http.MethodPatch, "/finish", h.FinishRoute)
 	}
 
 	booking := v1.Group("/reserve")
@@ -83,5 +85,10 @@ func (h *Handler) InitRoutes() {
 	{
 		photo.Handle(http.MethodPost, "/upload", h.UploadPhoto)
 		photo.Handle(http.MethodGet, "/photo/:id", h.GetPhoto)
+	}
+
+	statuses := v1.Group("/statuses")
+	{
+		statuses.Handle(http.MethodGet, "/get", h.GetStatuses)
 	}
 }

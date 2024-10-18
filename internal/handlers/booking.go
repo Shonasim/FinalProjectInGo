@@ -24,7 +24,8 @@ func (h *Handler) CreateReservation(c *gin.Context) {
 			errors.Is(err, errors2.ErrInvalidSeatID) ||
 			errors.Is(err, errors2.ErrInvalidStatusID) ||
 			errors.Is(err, errors2.ErrInvalidCity) ||
-			errors.Is(err, errors2.ErrInvalidPrice) {
+			errors.Is(err, errors2.ErrInvalidPrice) ||
+			errors.Is(err, errors2.ErrInvalidCarId) {
 			h.logger.Printf("CreateReservation - h.service.AddBooking error: %v", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			return
