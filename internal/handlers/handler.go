@@ -61,16 +61,21 @@ func (h *Handler) InitRoutes() {
 	{
 		seat.Handle(http.MethodPost, "/add", h.AddSeats)
 	}
-	routes := v1.Group("/routes")
+	route := v1.Group("/routes")
 	{
-		routes.Handle(http.MethodPost, "/add", h.CreateRoute)
-		routes.Handle(http.MethodGet, "/get", h.GetRoutes)
-		routes.Handle(http.MethodGet, "/get/{route_id}", h.GetRouteById)
+		route.Handle(http.MethodPost, "/add", h.CreateRoute)
+		route.Handle(http.MethodGet, "/get", h.GetRoutes)
+		route.Handle(http.MethodGet, "/get/{route_id}", h.GetRouteById)
 	}
 
-	booking := v1.Group("reserve")
+	booking := v1.Group("/reserve")
 	{
 		booking.Handle(http.MethodPost, "/add", h.CreateReservation)
 		booking.Handle(http.MethodGet, "/get/{booking_id}", h.GetReservation)
+	}
+
+	user := v1.Group("/users")
+	{
+		user.Handle(http.MethodGet, "/{user_id}", h.GetPersonalInfoByID)
 	}
 }

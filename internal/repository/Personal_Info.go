@@ -3,6 +3,7 @@ package repository
 import (
 	"FinalProject/internal/models"
 	"FinalProject/pkg/errors"
+	"log"
 	"time"
 )
 
@@ -16,4 +17,15 @@ func (r *Repository) AddPersonalInfo(u *models.PersonalInformation) (*models.Per
 		return nil, errors.ErrFailedCreate
 	}
 	return u, nil
+}
+
+func (r *Repository) GetPersonalInfoById(userId int) (*models.PersonalInformation, error) {
+	var persInfo models.PersonalInformation
+	query := `select * from personal_information where user_id = ?`
+	err := r.db.Raw(query, userId).Scan(&persInfo).Error
+	if err != nil {
+		log.Printf("GetPersonalInfoById: Failed to get user: %v\n", err)
+		return nil, errors.ErrFailedToGet
+	}
+	return &persInfo, nil
 }

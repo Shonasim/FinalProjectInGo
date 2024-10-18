@@ -13,6 +13,10 @@ func (s *Service) FillExtraInfo(information models.PersonalInformation) (*models
 	return s.Repository.AddPersonalInfo(&information)
 }
 
+func (s *Service) GetPersInfoById(userId int) (*models.PersonalInformation, error) {
+	return s.Repository.GetPersonalInfoById(userId)
+}
+
 func validatePersonaInfo(user models.PersonalInformation) error {
 	if user.FirstName == "" {
 		return errors.ErrInvalidFirstName
